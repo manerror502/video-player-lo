@@ -44,15 +44,11 @@ export default {
   text-align: center;
 }
 
-html {
-    font-size: 15px;
-}
-
-body {
+html, body {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     margin: 0;
     margin-top: 60px;
-    font-size: 1rem;
+    font-size: 15px;
     color: #dfe7ee;
     &.no-scroll {
         overflow: hidden;

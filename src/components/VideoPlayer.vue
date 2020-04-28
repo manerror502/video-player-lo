@@ -464,13 +464,18 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 20px 10px;
+  font-size: 1.5em;
+  padding: 0.8em .6em;
   text-align: left;
   background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(240,240,240,0) 100%);
   transition: .2s ease;
 
   h2{
     margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1em;
   }
 }
 
@@ -566,14 +571,21 @@ export default {
       border: none;
       color: #cecece;
       text-align: center;
-      padding: 5px 5px;
-      margin: 0 5px;
+      padding: .4em;
+      margin: 0 .4em;
       cursor: pointer;
       transition: .2s ease;
 
+      @media (max-width: 450px) {
+        margin: 0 .1em;
+      }
+
       svg{
-        width: 20px;
-        height: 20px;
+        width: 1.3em;
+
+        @media (max-width: 450px) {
+          width: 1em;
+        }
       }
 
       &:hover{
@@ -601,8 +613,11 @@ export default {
       transition: .2s ease;
 
       svg{
-        width: 20px;
-        height: 20px;
+        width: 1.3em;
+
+        @media (max-width: 450px) {
+          width: 1em;
+        }
       }
 
       &:hover{
@@ -617,19 +632,38 @@ export default {
   color: #cecece;
   align-content: center;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 .8em;
   cursor: pointer;
 
+  @media (max-width: 450px) {
+    padding: 0 .5em;
+  }
+
   svg{
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
+    width: 1.3em;
+    margin-right: .4em;
+
+    @media (max-width: 450px) {
+      width: 1em;
+    }
+
+    @media (max-width: 370px) {
+      width: 1em;
+    }
   }
 
   &:hover{
     .volume__input{
-      width: 100px;
+      width: 8em;
       opacity: 1;
+
+      @media (max-width: 450px) {
+        width: 5em;
+      }
+
+      @media (max-width: 370px) {
+        width: 2.5em;
+      }
     }
   }
 }
@@ -641,8 +675,13 @@ export default {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  margin-left: 70px;
+  margin-left: 4.6em;
   transition: .2s ease;
+
+  @media (max-width: 450px) {
+    margin-left: 4em;
+  }
+
 }
 
 .videoplayer__btn-settings{
@@ -679,8 +718,12 @@ export default {
 
 .logo{
   display: inline-block;
-  font-size: 15px;
-  margin-left: 5px;
+  font-size: 1em;
+  margin-left: .4em;
+
+  @media (max-width: 400px) {
+    font-size: .8em;
+  }
 }
 
 .settings__tooltip{
@@ -688,10 +731,10 @@ export default {
   flex-direction: column;
   position: absolute;
   bottom: 150%;
-  right: 100px;
+  right: 6.6em;
   background-color: fade(#000, 79%);
-  padding: 10px 0;
-  width: 270px;
+  padding: .7em 0;
+  width: 18em;
   border-radius: 10px;
 
   li{
@@ -700,11 +743,12 @@ export default {
     list-style: none;
     width: 100%;
     margin: 0;
-    padding: 10px 15px;
+    padding: .7em .9em;
     text-align: left;
-    font-size: 1.3rem;
+    font-size: 1.3em;
     overflow: hidden;
     transition: .2s ease;
+    text-overflow: ellipsis;
     span{
       text-align: right;
     }
@@ -712,6 +756,10 @@ export default {
     &:hover{
       color: #ffffff;
       background-color: fade(#000, 99%);
+    }
+
+    @media (max-width: 500px) {
+      font-size: 0.7em;
     }
   }
 
@@ -721,11 +769,11 @@ export default {
     right: -56%;
     opacity: 1;
     z-index: 10;
-    width: 150px;
+    width: 10em;
     text-align: center;
-    line-height: 30px;
+    line-height: 2em;
     background-color: fade(#000, 70%);
-    border-radius: 10px;
+    border-radius: .8em;
     overflow: hidden;
     transition: .2s ease;
 
@@ -733,14 +781,34 @@ export default {
       display: block;
       list-style: none;
       margin: 0;
-      padding: 5px 10px;
+      padding: .4em .8em;
       text-align: center;
+      text-overflow: ellipsis;
 
       &:hover{
         cursor: pointer;
         background-color: fade(#000, 80%);
       }
+
     }
+    @media (max-width: 500px) {
+        width: 7em;
+        right: -40%;
+      }
+
+      @media (max-width: 370px) {
+        width: 5em;
+      }
+  }
+
+  @media (max-width: 500px) {
+    width: 13em;
+    right: 100%;
+  }
+
+  @media (max-width: 370px) {
+    width: 10em;
+    right: 170%;
   }
 
 }

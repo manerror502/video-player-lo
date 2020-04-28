@@ -1,10 +1,14 @@
 <template>
   <div class="modal">
-    <button class="btn btn-close" @click="$emit('close')">X</button>
+    <button
+      class="btn btn-close"
+      @click="$emit('close')"
+    >
+      X
+    </button>
     <div class="modal__dialog">
-
       <div class="modal__player">
-        <VideoPlayer :our=our />
+        <VideoPlayer :our="our" />
       </div>
     </div>
   </div>
@@ -15,14 +19,14 @@ import VideoPlayer from './VideoPlayer'
 
 export default {
   name: 'ModalWindow',
+  components: {
+    VideoPlayer
+  },
   props: {
     our: {
       type: Boolean,
       required: true
     }
-  },
-  components: {
-    VideoPlayer
   }
 }
 </script>
@@ -54,6 +58,7 @@ export default {
   position: absolute;
   right: 10px;
   top: 10px;
+  z-index: 12;
   display: block;
   padding: 10px 20px;
   font-weight: bold;
