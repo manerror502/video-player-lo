@@ -30,7 +30,10 @@
         />
       </div>
 
-      <div class="videoplayer__title">
+      <div
+        v-if="out"
+        class="videoplayer__title"
+      >
         <h2>Title</h2>
       </div>
 
