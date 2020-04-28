@@ -13,9 +13,9 @@
       :class="{play: stateVideo == 'play', show: loading}"
     >
       <!-- Из папки public, webpack тварь -->
+      <!-- Почему-то видео в 720p не хочет повторяться -->
       <video
         ref="videoPlayer"
-        loop
         :src="'video.'+quality+'.mp4'"
         class="videoplayer__video"
         @ended="onEndFunc"
@@ -36,22 +36,29 @@
       </div>
 
       <div
-        v-if="our"
+        v-if="!our"
         class="videoplayer__title"
       >
         <h2>Title</h2>
       </div>
 
-      <p class="videoplayer__time">
-        {{ previewTime }}
-      </p>
-      <video
-        ref="videoPlayertPreview"
-        muted
-        class="videoplayer__video videoplayer__video--preview"
+      <div
+        class="videoplayer__preview"
+        :style="{left: positionPreview + 'px'}"
       >
-        <source src="video.320.mp4">
-      </video>
+        <p
+          class="videoplayer__time"
+        >
+          {{ previewTime }}
+        </p>
+        <video
+          ref="videoPlayertPreview"
+          muted
+          class="videoplayer__video"
+        >
+          <source src="video.320.mp4">
+        </video>
+      </div>
 
       <div class="videoplayer__btn">
         <div class="videoplayer__btn-left">
@@ -121,7 +128,7 @@
         <div class="videoplayer__btn-right">
           <button
             class="videoplayer__btn-settings"
-            :class="{active: settingsTooltip}"
+            :class="{active: settingsTooltip, HD: quality == 720}"
           >
             <div
               class="settings__icon"
@@ -234,6 +241,7 @@ export default {
   data: () => ({
     video: NaN,
     videoPreview: null,
+    positionPreview: 0,
     previewTime: '0:00',
     videoDuration: '0:00',
     timer: '0:00',
@@ -356,8 +364,11 @@ export default {
       const p = this.$refs.progress
       const w = p.offsetWidth
       const o = event.offsetX
+
       video.currentTime = (video.duration * o) / w // Вычисление момент видео
       this.previewTime = this.filterTimer(video.currentTime)
+
+      this.positionPreview = o
     },
     fullScreen () {
       const videoContainer = this.$refs.videoContainer
@@ -463,11 +474,7 @@ export default {
   }
 }
 
-.videoplayer__video{
-  width: 100%;
-  height: 100%;
-
-  &--preview{
+.videoplayer__preview{
     position: absolute;
     bottom: 70px;
     left: 50%;
@@ -480,13 +487,16 @@ export default {
     border: 2px solid fade(#fff, 50%);
     border-radius: 10px;
     overflow: hidden;
-    transition: .2s ease;
-  }
+}
+
+.videoplayer__video{
+  width: 100%;
+  height: 100%;
 }
 
 .videoplayer__time{
     position: absolute;
-    bottom: 80px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 11;
@@ -504,11 +514,12 @@ export default {
   background-color: fade(#b2b2b2, 40%);
   padding: 1px 0;
   transition: .5s ease;
-   &:hover ~ .videoplayer__video--preview{
+  cursor: pointer;
+   &:hover ~ .videoplayer__preview{
       opacity: 1;
    }
 
-   &:hover ~ .videoplayer__time{
+   &:hover ~ .videoplayer__preview .videoplayer__time{
       visibility: visible;
    }
 
@@ -645,15 +656,25 @@ export default {
     transition: .2s ease;
   }
 
+  &.HD{
+    &:after{
+      content: 'HD';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 0.5rem;
+      color: #fff;
+      background-color: #ff0000;
+    }
+  }
+
   &.active{
     svg{
       transform: rotate(180deg);
     }
-
-    &:hover{
-      color: #cecece;
-    }
   }
+
 }
 
 .logo{
