@@ -1,114 +1,214 @@
 <template>
   <div>
-    <p :class="{show: !loading}">Загрузка</p>
+    <p :class="{show: !loading}">
+      Загрузка
+    </p>
 
-    <div class="videoplayer" ref='videoContainer' :class="{play: stateVideo == 'play', show: loading}" >
-    <!-- Из папки public, webpack тварь -->
-      <video :src="'video.'+quality+'.mp4'" class="videoplayer__video" ref="videoPlayer">
+    <div
+      ref="videoContainer"
+      class="videoplayer"
+      :class="{play: stateVideo == 'play', show: loading}"
+    >
+      <!-- Из папки public, webpack тварь -->
+      <video
+        ref="videoPlayer"
+        :src="'video.'+quality+'.mp4'"
+        class="videoplayer__video"
+      >
         Нету
       </video>
 
-      <div class="videobar__container" @mousemove="videoPlayertPreview" @click="videoRewind" ref="progress">
-        <div :style="{width: progress + '%'}" class="videobar__progress"></div>
+      <div
+        ref="progress"
+        class="videobar__container"
+        @mousemove="videoPlayertPreview"
+        @click="videoRewind"
+      >
+        <div
+          :style="{width: progress + '%'}"
+          class="videobar__progress"
+        />
       </div>
 
-      <p class="videoplayer__time">{{previewTime}}</p>
-      <video muted class="videoplayer__video videoplayer__video--preview" ref="videoPlayertPreview" >
-          <source src="video.320.mp4">
+      <div class="videoplayer__title">
+        <h2>Title</h2>
+      </div>
+
+      <p class="videoplayer__time">
+        {{ previewTime }}
+      </p>
+      <video
+        ref="videoPlayertPreview"
+        muted
+        class="videoplayer__video videoplayer__video--preview"
+      >
+        <source src="video.320.mp4">
       </video>
 
-      <div v-if='!our' class="logo">
-        logo
-      </div>
-
       <div class="videoplayer__btn">
-          <div class="videoplayer__btn-left">
-            <button  @click="play" v-if="stateVideo == 'stopped' || stateVideo == 'pause'">
-              <svg viewBox="0 0 494.148 494.148">
-                <path fill='currentcolor' d="M405.284,201.188L130.804,13.28C118.128,4.596,105.356,0,94.74,0C74.216,0,61.52,16.472,61.52,44.044v406.124
+        <div class="videoplayer__btn-left">
+          <button
+            v-if="stateVideo == 'stopped' || stateVideo == 'pause'"
+            @click="play"
+          >
+            <svg viewBox="0 0 494.148 494.148">
+              <path
+                fill="currentcolor"
+                d="M405.284,201.188L130.804,13.28C118.128,4.596,105.356,0,94.74,0C74.216,0,61.52,16.472,61.52,44.044v406.124
                 c0,27.54,12.68,43.98,33.156,43.98c10.632,0,23.2-4.6,35.904-13.308l274.608-187.904c17.66-12.104,27.44-28.392,27.44-45.884
-                C432.632,229.572,422.964,213.288,405.284,201.188z"/>
-              </svg>
-            </button>
-            <button  @click="pause" v-else>
-              <svg viewBox="0 0 512 512">
-                <path fill='currentcolor' d="M181.333,0H74.667c-17.643,0-32,14.357-32,32v448c0,17.643,14.357,32,32,32h106.667c17.643,0,32-14.357,32-32V32
-                C213.333,14.357,198.976,0,181.333,0z"/>
-                <path fill='currentcolor' d="M437.333,0H330.667c-17.643,0-32,14.357-32,32v448c0,17.643,14.357,32,32,32h106.667c17.643,0,32-14.357,32-32V32
-                C469.333,14.357,454.976,0,437.333,0z"/>
-              </svg>
-            </button>
-            <button  @click="stop">
-              <svg viewBox="0 0 493.56 493.56">
-                <path fill='currentcolor' d="M438.254,0H58.974C27.502,0,0.006,25.992,0.006,57.472v379.256c0,31.48,27.496,56.832,58.968,56.832h379.28
-                c31.468,0,55.3-25.352,55.3-56.832V57.472C493.554,25.992,469.722,0,438.254,0z"/>
-              </svg>
-            </button>
-            <button  @click="back">
-              <svg viewBox="0 0 13.68 13.68">
-                <path fill='currentcolor' d="M13.268,1.662c-0.247-0.128-0.548-0.106-0.775,0.06L7.706,5.197V3.946V2.329
+                C432.632,229.572,422.964,213.288,405.284,201.188z"
+              />
+            </svg>
+          </button>
+          <button
+            v-else
+            @click="pause"
+          >
+            <svg viewBox="0 0 512 512">
+              <path
+                fill="currentcolor"
+                d="M181.333,0H74.667c-17.643,0-32,14.357-32,32v448c0,17.643,14.357,32,32,32h106.667c17.643,0,32-14.357,32-32V32
+                C213.333,14.357,198.976,0,181.333,0z"
+              />
+              <path
+                fill="currentcolor"
+                d="M437.333,0H330.667c-17.643,0-32,14.357-32,32v448c0,17.643,14.357,32,32,32h106.667c17.643,0,32-14.357,32-32V32
+                C469.333,14.357,454.976,0,437.333,0z"
+              />
+            </svg>
+          </button>
+          <button @click="stop">
+            <svg viewBox="0 0 493.56 493.56">
+              <path
+                fill="currentcolor"
+                d="M438.254,0H58.974C27.502,0,0.006,25.992,0.006,57.472v379.256c0,31.48,27.496,56.832,58.968,56.832h379.28
+                c31.468,0,55.3-25.352,55.3-56.832V57.472C493.554,25.992,469.722,0,438.254,0z"
+              />
+            </svg>
+          </button>
+          <button @click="back">
+            <svg viewBox="0 0 13.68 13.68">
+              <path
+                fill="currentcolor"
+                d="M13.268,1.662c-0.247-0.128-0.548-0.106-0.775,0.06L7.706,5.197V3.946V2.329
                 c0-0.283-0.159-0.538-0.411-0.667c-0.248-0.128-0.549-0.106-0.776,0.06L0.306,6.233C0.115,6.374,0,6.598,0,6.838
                 s0.114,0.465,0.306,0.604l6.213,4.512c0.128,0.094,0.283,0.145,0.439,0.145c0.114,0,0.23-0.03,0.337-0.083
                 c0.252-0.129,0.411-0.388,0.411-0.665V9.732V8.478l4.787,3.477c0.129,0.094,0.283,0.145,0.439,0.145
                 c0.113,0,0.229-0.03,0.336-0.083c0.253-0.129,0.412-0.388,0.412-0.665V9.733V3.947V2.329C13.68,2.047,13.521,1.791,13.268,1.662z"
-                />
-              </svg>
-            </button>
-            <button  @click="forward">
-              <svg viewBox="0 0 18.909 18.909">
-                <path fill='currentcolor' d="M10.193,8.311L1.887,1.714C1.484,1.511,1.003,1.533,0.619,1.766C0.233,1.998,0,2.412,0,2.856v13.198
+              />
+            </svg>
+          </button>
+          <button @click="forward">
+            <svg viewBox="0 0 18.909 18.909">
+              <path
+                fill="currentcolor"
+                d="M10.193,8.311L1.887,1.714C1.484,1.511,1.003,1.533,0.619,1.766C0.233,1.998,0,2.412,0,2.856v13.198
                 c0,0.443,0.233,0.856,0.619,1.089c0.208,0.126,0.444,0.19,0.683,0.19c0.201,0,0.401-0.046,0.586-0.138l8.306-6.599
-                c0.4-0.376,0.716-0.658,0.716-1.143S10.641,8.707,10.193,8.311z"/>
-                <path fill='currentcolor' d="M18.193,8.311L9.887,1.714C9.484,1.511,9.002,1.533,8.618,1.766
+                c0.4-0.376,0.716-0.658,0.716-1.143S10.641,8.707,10.193,8.311z"
+              />
+              <path
+                fill="currentcolor"
+                d="M18.193,8.311L9.887,1.714C9.484,1.511,9.002,1.533,8.618,1.766
                 c-0.386,0.232-0.619,0.646-0.619,1.09v13.198c0,0.443,0.233,0.856,0.619,1.089c0.208,0.126,0.444,0.19,0.683,0.19
-                c0.201,0,0.401-0.046,0.586-0.138l8.306-6.599c0.4-0.376,0.716-0.658,0.716-1.143S18.641,8.707,18.193,8.311z"/>
-              </svg>
-            </button>
+                c0.201,0,0.401-0.046,0.586-0.138l8.306-6.599c0.4-0.376,0.716-0.658,0.716-1.143S18.641,8.707,18.193,8.311z"
+              />
+            </svg>
+          </button>
 
-            <span>{{timer}}/{{videoDuration}}</span>
+          <span>{{ timer }}/{{ videoDuration }}</span>
 
-            <span class="videoplayer__sound" >
-              <svg viewBox="0 0 384 384"  @click="volumeMuted">
-                <path fill='currentcolor' d="M288,192c0-37.653-21.76-70.187-53.333-85.867v171.84C266.24,262.187,288,229.653,288,192z"/>
-                <polygon fill='currentcolor' points="0,128 0,256 85.333,256 192,362.667 192,21.333 85.333,128       "/>
-                <path fill='currentcolor' d="M234.667,4.907V48.96C296.32,67.307,341.333,124.373,341.333,192S296.32,316.693,234.667,335.04v44.053
-                  C320.107,359.68,384,283.413,384,192S320.107,24.32,234.667,4.907z"/>
-              </svg>
-              <input type="range" class="volume__input" min=0 max=100 v-model.number="volumeNum" @input="volume">
-              <span>{{volumeNum}}%</span>
-            </span>
-
+          <span class="videoplayer__sound">
+            <svg
+              viewBox="0 0 384 384"
+              @click="volumeMuted"
+            >
+              <path
+                fill="currentcolor"
+                d="M288,192c0-37.653-21.76-70.187-53.333-85.867v171.84C266.24,262.187,288,229.653,288,192z"
+              />
+              <polygon
+                fill="currentcolor"
+                points="0,128 0,256 85.333,256 192,362.667 192,21.333 85.333,128       "
+              />
+              <path
+                fill="currentcolor"
+                d="M234.667,4.907V48.96C296.32,67.307,341.333,124.373,341.333,192S296.32,316.693,234.667,335.04v44.053
+                  C320.107,359.68,384,283.413,384,192S320.107,24.32,234.667,4.907z"
+              />
+            </svg>
+            <input
+              v-model.number="volumeNum"
+              type="range"
+              class="volume__input"
+              min="0"
+              max="100"
+              @input="volume"
+            >
+            <span>{{ volumeNum }}%</span>
+          </span>
+        </div>
+        <div class="videoplayer__btn-right">
+          <button @click="speedUp">
+            Скорость + 0.5
+          </button>
+          <button @click="speedDown">
+            Скорость - 0.5
+          </button>
+          <button @click="speedNormal">
+            Нормальная скорость
+          </button>
+          <span class="videoplayer__quality">
+            {{ quality }}p
+            <div class="videoplayer__quality-hover">
+              <p @click="quality = 320">320p</p>
+              <p @click="quality = 480">480p</p>
+              <p @click="quality = 720">720p</p>
+            </div>
+          </span>
+          <button
+            v-if="!stateFullScreen"
+            @click="fullScreen"
+          >
+            <svg viewBox="0 0 512 512">
+              <path
+                fill="currentcolor"
+                d="M128,32V0H16C7.163,0,0,7.163,0,16v112h32V54.56L180.64,203.2l22.56-22.56L54.56,32H128z"
+              />
+              <path
+                fill="currentcolor"
+                d="M496,0H384v32h73.44L308.8,180.64l22.56,22.56L480,54.56V128h32V16C512,7.163,504.837,0,496,0z"
+              />
+              <path
+                fill="currentcolor"
+                d="M480,457.44L331.36,308.8l-22.56,22.56L457.44,480H384v32h112c8.837,0,16-7.163,16-16V384h-32V457.44z"
+              />
+              <path
+                fill="currentcolor"
+                d="M180.64,308.64L32,457.44V384H0v112c0,8.837,7.163,16,16,16h112v-32H54.56L203.2,331.36L180.64,308.64z"
+              />
+            </svg>
+          </button>
+          <button
+            v-else
+            @click="noneFullScreen"
+          >
+            <svg viewBox="0 0 357 357">
+              <path
+                fill="currentcolor"
+                d="M0,280.5h76.5V357h51V229.5H0V280.5z M76.5,76.5H0v51h127.5V0h-51V76.5z M229.5,357h51v-76.5H357v-51H229.5V357z
+                M280.5,76.5V0h-51v127.5H357v-51H280.5z"
+              />
+            </svg>
+          </button>
+          <div
+            v-if="!our"
+            class="logo"
+          >
+            logo
           </div>
-          <div class="videoplayer__btn-right">
-            <button @click="speedUp">Скорость + 0.5</button>
-            <button @click="speedDown">Скорость - 0.5</button>
-            <button @click="speedNormal">Нормальная скорость</button>
-            <span class="videoplayer__quality">
-              {{quality}}p
-              <div class="videoplayer__quality-hover">
-                <p @click="quality = 320">320p</p>
-                <p @click="quality = 480">480p</p>
-                <p @click="quality = 720">720p</p>
-              </div>
-            </span>
-            <button v-if="!stateFullScreen" @click="fullScreen">
-              <svg viewBox="0 0 512 512">
-                <path fill='currentcolor' d="M128,32V0H16C7.163,0,0,7.163,0,16v112h32V54.56L180.64,203.2l22.56-22.56L54.56,32H128z"/>
-                <path fill='currentcolor' d="M496,0H384v32h73.44L308.8,180.64l22.56,22.56L480,54.56V128h32V16C512,7.163,504.837,0,496,0z"/>
-                <path fill='currentcolor' d="M480,457.44L331.36,308.8l-22.56,22.56L457.44,480H384v32h112c8.837,0,16-7.163,16-16V384h-32V457.44z"/>
-                <path fill='currentcolor' d="M180.64,308.64L32,457.44V384H0v112c0,8.837,7.163,16,16,16h112v-32H54.56L203.2,331.36L180.64,308.64z"/>
-              </svg>
-            </button>
-            <button v-else @click="noneFullScreen">
-              <svg viewBox="0 0 357 357">
-                <path fill='currentcolor' d="M0,280.5h76.5V357h51V229.5H0V280.5z M76.5,76.5H0v51h127.5V0h-51V76.5z M229.5,357h51v-76.5H357v-51H229.5V357z
-                M280.5,76.5V0h-51v127.5H357v-51H280.5z"/>
-              </svg>
-            </button>
-          </div>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -130,6 +230,14 @@ export default {
     stateFullScreen: false,
     loading: true
   }),
+  watch: {
+    // Изменение видео контейнера при изменение качества
+    quality () {
+      this.video = this.$refs.videoPlayer
+      this.video.ontimeupdate = this.progressUpdate
+      this.video.load()
+    }
+  },
   mounted () {
     // Загружем основное видео
     this.video = this.$refs.videoPlayer
@@ -149,14 +257,6 @@ export default {
         this.loading = false
       }
     }, 1000)
-  },
-  watch: {
-    // Изменение видео контейнера при изменение качества
-    quality () {
-      this.video = this.$refs.videoPlayer
-      this.video.ontimeupdate = this.progressUpdate
-      this.video.load()
-    }
   },
   methods: {
     play () {
@@ -293,6 +393,7 @@ export default {
 
     .videobar__container{
       padding: 0;
+      bottom: 0px;
 
       &:hover{
         padding: 4px 0;
@@ -305,6 +406,11 @@ export default {
       opacity: 0;
     }
 
+    .videoplayer__title{
+      opacity: 0;
+      visibility: hidden;
+    }
+
     &:hover{
       .videoplayer__btn{
         opacity: 1;
@@ -312,13 +418,35 @@ export default {
 
       .videobar__container{
         padding: 4px 0;
+        bottom: 45px;
         .videobar__progress{
-          height: 10px;
+          height: 5px;
         }
+      }
+
+      .videoplayer__title{
+        visibility: visible;
+        opacity: 1;
       }
     }
   }
 
+}
+
+.videoplayer__title{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 10px;
+  text-align: left;
+  background-color: fade(#000, 40%);
+  box-shadow: 0 3px 10px fade(#000, 40%);
+  transition: .2s ease;
+
+  h2{
+    margin: 0;
+  }
 }
 
 .videoplayer__video{
@@ -327,7 +455,7 @@ export default {
 
   &--preview{
     position: absolute;
-    top: 40px;
+    bottom: 70px;
     left: 50%;
     transform: translateX(-50%);
     display: block;
@@ -335,8 +463,8 @@ export default {
     z-index: 10;
     width: 200px;
     height: auto;
-    border: 2px solid #fff;
-    border-radius: 20px;
+    border: 2px solid fade(#fff, 50%);
+    border-radius: 10px;
     overflow: hidden;
     transition: .2s ease;
   }
@@ -344,7 +472,7 @@ export default {
 
 .videoplayer__time{
     position: absolute;
-    top: 30px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 11;
@@ -356,11 +484,12 @@ export default {
 
 .videobar__container{
   position: absolute;
-  top: 0;
+  bottom: 45px;
   z-index: 10;
   width: 100%;
   padding: 4px 0;
-  background-color: fade(#000, 80%);
+  background-color: fade(#000, 40%);
+  transition: .2s ease;
    &:hover ~ .videoplayer__video--preview{
       opacity: 1;
    }
@@ -369,10 +498,16 @@ export default {
       visibility: visible;
    }
 
+   &:hover{
+     .videobar__progress{
+       height: 10px;
+     }
+   }
+
 }
 
 .videobar__progress{
-  height: 10px;
+  height: 5px;
   background-color: goldenrod;
   border-radius: 30px;
   transition: .2s ease;
@@ -385,14 +520,14 @@ export default {
   width: 100%;
   text-align: left;
   position: absolute;
-  bottom: 0;
+  bottom: 5px;
   left: 0;
   z-index: 10;
-  background-color: fade(#000, 70%);
+  background-color: fade(#000, 40%);
+  box-shadow: 0 -3px 10px fade(#000, 40%);
   align-content: center;
   align-items: center;
   justify-content: space-between;
-  border-radius: 10px;
   transition: .2s ease;
 
   &-left{
@@ -465,14 +600,24 @@ export default {
     height: 20px;
     margin-right: 5px;
   }
+
+  &:hover{
+    .volume__input{
+      width: 100px;
+      opacity: 1;
+    }
+  }
 }
 
 .volume__input{
   display: inline-block;
+  width: 0;
+  opacity: 0;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   margin-left: 70px;
+  transition: .2s ease;
 }
 
 .videoplayer__quality{
@@ -514,9 +659,9 @@ export default {
 }
 
 .logo{
-  position: absolute;
-  top: 20px;
-  right: 10px;
+  display: inline-block;
+  font-size: 15px;
+  margin-left: 5px;
 }
 
 </style>
