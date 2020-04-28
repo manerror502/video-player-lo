@@ -448,6 +448,12 @@ export default {
         .videobar__progress{
           height: 5px;
         }
+
+        &:hover{
+          .videobar__progress{
+            height: 10px;
+          }
+        }
       }
 
       .videoplayer__title{
@@ -464,7 +470,7 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  font-size: 1.5em;
+  font-size: 1.2em;
   padding: 0.8em .6em;
   text-align: left;
   background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(240,240,240,0) 100%);
@@ -518,7 +524,7 @@ export default {
   width: 100%;
   background-color: fade(#b2b2b2, 40%);
   padding: 1px 0;
-  transition: .5s ease;
+  transition: .2s ease;
   cursor: pointer;
    &:hover ~ .videoplayer__preview{
       opacity: 1;
@@ -540,7 +546,7 @@ export default {
   height: 5px;
   background-color: goldenrod;
   border-radius: 30px;
-  transition: .2s ease;
+  transition: width 1s linear, height .2s ease;
 }
 
 .videoplayer__btn{
@@ -730,7 +736,7 @@ export default {
   display: flex;
   flex-direction: column;
   position: absolute;
-  bottom: 150%;
+  bottom: 200%;
   right: 6.6em;
   background-color: fade(#000, 79%);
   padding: .7em 0;
@@ -765,11 +771,11 @@ export default {
 
   &-select{
     position: absolute;
-    top: 0px;
+    bottom: 0;
     right: -56%;
     opacity: 1;
     z-index: 10;
-    width: 10em;
+    width: 7em;
     text-align: center;
     line-height: 2em;
     background-color: fade(#000, 70%);
@@ -784,6 +790,7 @@ export default {
       padding: .4em .8em;
       text-align: center;
       text-overflow: ellipsis;
+      font-size: 1em;
 
       &:hover{
         cursor: pointer;
