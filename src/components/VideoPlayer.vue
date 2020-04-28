@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p :class="{show: !loading}">
+    <p
+      :class="{show: !loading}"
+      style="color: black"
+    >
       Загрузка
     </p>
 
@@ -12,8 +15,10 @@
       <!-- Из папки public, webpack тварь -->
       <video
         ref="videoPlayer"
+        loop
         :src="'video.'+quality+'.mp4'"
         class="videoplayer__video"
+        @ended="onEndFunc"
       >
         Нету
       </video>
@@ -31,7 +36,7 @@
       </div>
 
       <div
-        v-if="out"
+        v-if="our"
         class="videoplayer__title"
       >
         <h2>Title</h2>
@@ -80,43 +85,6 @@
               />
             </svg>
           </button>
-          <button @click="stop">
-            <svg viewBox="0 0 493.56 493.56">
-              <path
-                fill="currentcolor"
-                d="M438.254,0H58.974C27.502,0,0.006,25.992,0.006,57.472v379.256c0,31.48,27.496,56.832,58.968,56.832h379.28
-                c31.468,0,55.3-25.352,55.3-56.832V57.472C493.554,25.992,469.722,0,438.254,0z"
-              />
-            </svg>
-          </button>
-          <button @click="back">
-            <svg viewBox="0 0 13.68 13.68">
-              <path
-                fill="currentcolor"
-                d="M13.268,1.662c-0.247-0.128-0.548-0.106-0.775,0.06L7.706,5.197V3.946V2.329
-                c0-0.283-0.159-0.538-0.411-0.667c-0.248-0.128-0.549-0.106-0.776,0.06L0.306,6.233C0.115,6.374,0,6.598,0,6.838
-                s0.114,0.465,0.306,0.604l6.213,4.512c0.128,0.094,0.283,0.145,0.439,0.145c0.114,0,0.23-0.03,0.337-0.083
-                c0.252-0.129,0.411-0.388,0.411-0.665V9.732V8.478l4.787,3.477c0.129,0.094,0.283,0.145,0.439,0.145
-                c0.113,0,0.229-0.03,0.336-0.083c0.253-0.129,0.412-0.388,0.412-0.665V9.733V3.947V2.329C13.68,2.047,13.521,1.791,13.268,1.662z"
-              />
-            </svg>
-          </button>
-          <button @click="forward">
-            <svg viewBox="0 0 18.909 18.909">
-              <path
-                fill="currentcolor"
-                d="M10.193,8.311L1.887,1.714C1.484,1.511,1.003,1.533,0.619,1.766C0.233,1.998,0,2.412,0,2.856v13.198
-                c0,0.443,0.233,0.856,0.619,1.089c0.208,0.126,0.444,0.19,0.683,0.19c0.201,0,0.401-0.046,0.586-0.138l8.306-6.599
-                c0.4-0.376,0.716-0.658,0.716-1.143S10.641,8.707,10.193,8.311z"
-              />
-              <path
-                fill="currentcolor"
-                d="M18.193,8.311L9.887,1.714C9.484,1.511,9.002,1.533,8.618,1.766
-                c-0.386,0.232-0.619,0.646-0.619,1.09v13.198c0,0.443,0.233,0.856,0.619,1.089c0.208,0.126,0.444,0.19,0.683,0.19
-                c0.201,0,0.401-0.046,0.586-0.138l8.306-6.599c0.4-0.376,0.716-0.658,0.716-1.143S18.641,8.707,18.193,8.311z"
-              />
-            </svg>
-          </button>
 
           <span>{{ timer }}/{{ videoDuration }}</span>
 
@@ -151,23 +119,65 @@
           </span>
         </div>
         <div class="videoplayer__btn-right">
-          <button @click="speedUp">
-            Скорость + 0.5
-          </button>
-          <button @click="speedDown">
-            Скорость - 0.5
-          </button>
-          <button @click="speedNormal">
-            Нормальная скорость
-          </button>
-          <span class="videoplayer__quality">
-            {{ quality }}p
-            <div class="videoplayer__quality-hover">
-              <p @click="quality = 320">320p</p>
-              <p @click="quality = 480">480p</p>
-              <p @click="quality = 720">720p</p>
+          <button
+            class="videoplayer__btn-settings"
+            :class="{active: settingsTooltip}"
+          >
+            <div
+              class="settings__icon"
+              @click="settingsTooltip = !settingsTooltip"
+            >
+              <svg viewBox="0 0 512 512">
+                <path
+                  fill="#d2d2d2"
+                  d="m499.953125 197.703125-39.351563-8.554687c-3.421874-10.476563-7.660156-20.695313-12.664062-30.539063l21.785156-33.886719c3.890625-6.054687 3.035156-14.003906-2.050781-19.089844l-61.304687-61.304687c-5.085938-5.085937-13.035157-5.941406-19.089844-2.050781l-33.886719 21.785156c-9.84375-5.003906-20.0625-9.242188-30.539063-12.664062l-8.554687-39.351563c-1.527344-7.03125-7.753906-12.046875-14.949219-12.046875h-86.695312c-7.195313 0-13.421875 5.015625-14.949219 12.046875l-8.554687 39.351563c-10.476563 3.421874-20.695313 7.660156-30.539063 12.664062l-33.886719-21.785156c-6.054687-3.890625-14.003906-3.035156-19.089844 2.050781l-61.304687 61.304687c-5.085937 5.085938-5.941406 13.035157-2.050781 19.089844l21.785156 33.886719c-5.003906 9.84375-9.242188 20.0625-12.664062 30.539063l-39.351563 8.554687c-7.03125 1.53125-12.046875 7.753906-12.046875 14.949219v86.695312c0 7.195313 5.015625 13.417969 12.046875 14.949219l39.351563 8.554687c3.421874 10.476563 7.660156 20.695313 12.664062 30.539063l-21.785156 33.886719c-3.890625 6.054687-3.035156 14.003906 2.050781 19.089844l61.304687 61.304687c5.085938 5.085937 13.035157 5.941406 19.089844 2.050781l33.886719-21.785156c9.84375 5.003906 20.0625 9.242188 30.539063 12.664062l8.554687 39.351563c1.527344 7.03125 7.753906 12.046875 14.949219 12.046875h86.695312c7.195313 0 13.421875-5.015625 14.949219-12.046875l8.554687-39.351563c10.476563-3.421874 20.695313-7.660156 30.539063-12.664062l33.886719 21.785156c6.054687 3.890625 14.003906 3.039063 19.089844-2.050781l61.304687-61.304687c5.085937-5.085938 5.941406-13.035157 2.050781-19.089844l-21.785156-33.886719c5.003906-9.84375 9.242188-20.0625 12.664062-30.539063l39.351563-8.554687c7.03125-1.53125 12.046875-7.753906 12.046875-14.949219v-86.695312c0-7.195313-5.015625-13.417969-12.046875-14.949219zm-152.160156 58.296875c0 50.613281-41.179688 91.792969-91.792969 91.792969s-91.792969-41.179688-91.792969-91.792969 41.179688-91.792969 91.792969-91.792969 91.792969 41.179688 91.792969 91.792969zm0 0"
+                />
+              </svg>
             </div>
-          </span>
+
+            <div
+              v-if="settingsTooltip"
+              class="settings__tooltip"
+            >
+              <li @click="selectTooltipQuality = !selectTooltipQuality, selectTooltipTime = false">
+                Качество: <span>{{ quality }}p <span class="arrow"> ></span></span>
+
+                <div
+                  v-if="selectTooltipQuality"
+                  class="settings__tooltip-select"
+                >
+                  <li @click="quality = 320, settingsTooltip = false">
+                    320p
+                  </li>
+                  <li @click="quality = 480, settingsTooltip = false">
+                    480p
+                  </li>
+                  <li @click="quality = 720, settingsTooltip = false">
+                    720p
+                  </li>
+                </div>
+              </li>
+
+              <li @click="selectTooltipTime = !selectTooltipTime, selectTooltipQuality = false">
+                Скорость: <span>{{ speed }} <span class="arrow"> ></span></span>
+                <div
+                  v-if="selectTooltipTime"
+                  class="settings__tooltip-select"
+                >
+                  <li @click="speedUp, settingsTooltip = false">
+                    Высокая
+                  </li>
+                  <li @click="speedDown, settingsTooltip = false">
+                    Низкая
+                  </li>
+                  <li @click="speedNormal, settingsTooltip = false">
+                    Нормальная
+                  </li>
+                </div>
+              </li>
+            </div>
+          </button>
+
           <button
             v-if="!stateFullScreen"
             @click="fullScreen"
@@ -203,6 +213,7 @@
               />
             </svg>
           </button>
+
           <div
             v-if="!our"
             class="logo"
@@ -229,8 +240,12 @@ export default {
     volumeNum: 50,
     progress: 0,
     quality: 320 && 480 && 720,
+    speed: 'Нормальная',
     stateVideo: 'stopped',
     stateFullScreen: false,
+    settingsTooltip: false,
+    selectTooltipQuality: false,
+    selectTooltipTime: false,
     loading: true
   }),
   watch: {
@@ -280,12 +295,15 @@ export default {
     },
     speedUp () {
       this.video.playbackRate = 1.5
+      this.speed = 'Высокая'
     },
     speedDown () {
       this.video.playbackRate = 0.5
+      this.speed = 'Низкая'
     },
     speedNormal () {
       this.video.playbackRate = 1
+      this.speed = 'Нормальная'
     },
     volume () {
       const v = this.volumeNum
@@ -309,6 +327,10 @@ export default {
 
       return secMin
     },
+    onEndFunc () {
+      this.video.currentTime = 0
+      this.stateVideo = 'stopped'
+    },
     progressUpdate () {
       const video = this.video
       const d = video.duration
@@ -328,12 +350,6 @@ export default {
 
       this.progress = 100 * o / w // Вычисление прогресса
       video.currentTime = video.duration * o / w // Вычисление момента перемотки
-    },
-    forward () {
-      this.video.currentTime = this.video.currentTime + 15
-    },
-    back () {
-      this.video.currentTime = this.video.currentTime - 15
     },
     videoPlayertPreview () {
       const video = this.videoPreview
@@ -381,6 +397,10 @@ export default {
   display: none;
 }
 
+.arrow{
+  color: #ffffff;
+}
+
 .videoplayer{
   position: relative;
   max-width: 100%;
@@ -391,19 +411,11 @@ export default {
 
   &.play{
     .videobar__progress{
-      height: 3px;
+      height: 0;
     }
 
     .videobar__container{
       padding: 0;
-      bottom: 0px;
-
-      &:hover{
-        padding: 4px 0;
-        .videobar__progress{
-          height: 10px;
-        }
-      }
     }
     .videoplayer__btn{
       opacity: 0;
@@ -420,7 +432,7 @@ export default {
       }
 
       .videobar__container{
-        padding: 4px 0;
+        padding: 1px 0;
         bottom: 45px;
         .videobar__progress{
           height: 5px;
@@ -443,8 +455,7 @@ export default {
   width: 100%;
   padding: 20px 10px;
   text-align: left;
-  background-color: fade(#000, 40%);
-  box-shadow: 0 3px 10px fade(#000, 40%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(240,240,240,0) 100%);
   transition: .2s ease;
 
   h2{
@@ -490,9 +501,9 @@ export default {
   bottom: 45px;
   z-index: 10;
   width: 100%;
-  padding: 4px 0;
-  background-color: fade(#000, 40%);
-  transition: .2s ease;
+  background-color: fade(#b2b2b2, 40%);
+  padding: 1px 0;
+  transition: .5s ease;
    &:hover ~ .videoplayer__video--preview{
       opacity: 1;
    }
@@ -526,8 +537,7 @@ export default {
   bottom: 5px;
   left: 0;
   z-index: 10;
-  background-color: fade(#000, 40%);
-  box-shadow: 0 -3px 10px fade(#000, 40%);
+  background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(240,240,240,0) 100%);
   align-content: center;
   align-items: center;
   justify-content: space-between;
@@ -597,6 +607,7 @@ export default {
   align-content: center;
   align-items: center;
   padding: 0 10px;
+  cursor: pointer;
 
   svg{
     width: 20px;
@@ -623,40 +634,24 @@ export default {
   transition: .2s ease;
 }
 
-.videoplayer__quality{
+.videoplayer__btn-settings{
   position: relative;
-  margin: 0 5px;
 
-  &:hover{
-    .videoplayer__quality-hover{
-      opacity: 1;
-      height: 90px;
-      visibility: visible;
-    }
+  &:focus{
+    outline: none;
   }
 
-  &-hover{
-    position: absolute;
-    top: -90px;
-    left: -60%;
-    opacity: 0;
-    z-index: 10;
-    width: 100px;
-    height: 0;
-    text-align: center;
-    line-height: 30px;
-    background-color: fade(#000, 70%);
-    visibility: hidden;
+  svg{
     transition: .2s ease;
+  }
 
-    p{
-      margin: 0;
-      padding: 0;
+  &.active{
+    svg{
+      transform: rotate(180deg);
+    }
 
-      &:hover{
-        cursor: pointer;
-        background-color: fade(#000, 80%);
-      }
+    &:hover{
+      color: #cecece;
     }
   }
 }
@@ -665,6 +660,68 @@ export default {
   display: inline-block;
   font-size: 15px;
   margin-left: 5px;
+}
+
+.settings__tooltip{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 150%;
+  right: 100px;
+  background-color: fade(#000, 79%);
+  padding: 10px 0;
+  width: 270px;
+  border-radius: 10px;
+
+  li{
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    width: 100%;
+    margin: 0;
+    padding: 10px 15px;
+    text-align: left;
+    font-size: 1.3rem;
+    overflow: hidden;
+    transition: .2s ease;
+    span{
+      text-align: right;
+    }
+
+    &:hover{
+      color: #ffffff;
+      background-color: fade(#000, 99%);
+    }
+  }
+
+  &-select{
+    position: absolute;
+    top: 0px;
+    right: -56%;
+    opacity: 1;
+    z-index: 10;
+    width: 150px;
+    text-align: center;
+    line-height: 30px;
+    background-color: fade(#000, 70%);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: .2s ease;
+
+    li{
+      display: block;
+      list-style: none;
+      margin: 0;
+      padding: 5px 10px;
+      text-align: center;
+
+      &:hover{
+        cursor: pointer;
+        background-color: fade(#000, 80%);
+      }
+    }
+  }
+
 }
 
 </style>

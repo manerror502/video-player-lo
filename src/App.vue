@@ -1,9 +1,23 @@
 <template>
   <div id="app">
-    <button class="btn"  @click="modal = true, our = true" >Открыть плеер 1!</button>
-    <button class="btn"  @click="modal = true, our = false" >Открыть плеер 2!</button>
+    <button
+      class="btn"
+      @click="modal = true, our = true"
+    >
+      Открыть плеер 1!
+    </button>
+    <button
+      class="btn"
+      @click="modal = true, our = false"
+    >
+      Открыть плеер 2!
+    </button>
 
-    <ModalWindow v-if='modal' :our=our @close='modal = false' />
+    <ModalWindow
+      v-if="modal"
+      :our="our"
+      @close="modal = false"
+    />
   </div>
 </template>
 
@@ -13,24 +27,55 @@ import ModalWindow from './components/ModalWindow.vue'
 
 export default {
   name: 'App',
+  components: {
+    ModalWindow
+  },
   data: () => ({
     our: true,
     modal: false
-  }),
-  components: {
-    ModalWindow
-  }
+  })
 }
 </script>
 
 <style lang="less">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #dfe7ee;
-  margin-top: 60px;
+}
+
+html {
+    font-size: 15px;
+}
+
+body {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    margin: 0;
+    margin-top: 60px;
+    font-size: 1rem;
+    color: #dfe7ee;
+    &.no-scroll {
+        overflow: hidden;
+    }
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+p {
+    margin: 0;
 }
 
 .btn{
